@@ -19,6 +19,8 @@ dependencies {
     testRuntimeOnly("org.slf4j:slf4j-simple:1.7.36")
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.1'
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.13.1'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.6.1'
+
 }
 
 
