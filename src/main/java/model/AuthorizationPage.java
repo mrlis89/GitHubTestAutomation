@@ -1,31 +1,41 @@
 package model;
 
-import org.openqa.selenium.By;
-
-import static common.DriverConfigurator.chromeDriver;
-import static common.Waiter.*;
+import common.Waiter;
+import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class AuthorizationPage {
-    private final By loginField = By.xpath("//input[@id=\"login_field\"]");
-    private final By passwordField = By.xpath("//input[@id=\"password\"]");
-    private final By signInBtn = By.xpath("//input[@value=\"Sign in\"]");
+    private final WebDriver webDriver;
+    private Waiter waiter;
+    @FindBy(xpath = "//input[@id=\"login_field\"]")
+    private WebElement loginField;
+    @FindBy(xpath = "//input[@id=\"password\"]")
+    private WebElement passwordField;
+    @FindBy(xpath = "//input[@value=\"Sign in\"]")
+    private WebElement signInBtn;
 
+    public AuthorizationPage(WebDriver webDriver) {
+        this.webDriver = webDriver;
+        waiter = new Waiter(webDriver);
+        PageFactory.initElements(webDriver, this);
+    }
+
+    @Step("Ввести логин из файла gitHubUser.yaml")
     public void enterLogin(String login) {
-        waitFor(loginField);
-        chromeDriver
-                .findElement(loginField)
-                .sendKeys(login);
+        waiter.waitFor(loginField);
+        loginField.sendKeys(login);
     }
 
+    @Step("Ввести пароль из файла gitHubUser.yaml")
     public void enterPassword(String password) {
-        chromeDriver
-                .findElement(passwordField)
-                .sendKeys(password);
+        passwordField.sendKeys(password);
     }
 
+    @Step("Нажать зеленую кнопку Sign In")
     public void clickSignIn() {
-        chromeDriver
-                .findElement(signInBtn)
-                .click();
+        signInBtn.click();
     }
 }

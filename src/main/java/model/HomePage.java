@@ -1,11 +1,19 @@
 package model;
 
-import static common.DriverConfigurator.chromeDriver;
+import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
 
 public class HomePage {
+    private final WebDriver webDriver;
     private final String HOME_PAGE_URL = "https://github.com/";
 
+    public HomePage(WebDriver webDriver) {
+        this.webDriver = webDriver;
+    }
+
+    @Step("Открыть github.com/")
     public void open() {
-        chromeDriver.get(HOME_PAGE_URL);
+        webDriver.get(HOME_PAGE_URL);
     }
 }
