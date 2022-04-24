@@ -1,30 +1,41 @@
 package model;
 
-import org.openqa.selenium.By;
+import common.Waiter;
+import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
-import static common.DriverConfigurator.chromeDriver;
-import static common.Waiter.waitFor;
 
 public class UserProfilePopup {
-    private final By userProfileButton = By.xpath("//header[@role=\"banner\"]/descendant::summary[@aria-label=\"View profile and more\"]");
-    private final By signOutButton = By.xpath("//form[@class=\"logout-form\"]/descendant::button[@type=\"submit\"]");
+    private final WebDriver webDriver;
+    private Waiter waiter;
+    @FindBy(xpath = "//header[@role=\"banner\"]/descendant::summary[@aria-label=\"View profile and more\"]")
+    private WebElement userProfileButton;
+    @FindBy(xpath = "//form[@class=\"logout-form\"]/descendant::button[@type=\"submit\"]")
+    private WebElement signOutButton;
 
+    public UserProfilePopup(WebDriver webDriver) {
+        this.webDriver = webDriver;
+        waiter = new Waiter(webDriver);
+        PageFactory.initElements(webDriver, this);
+    }
+
+    @Step("Нажать кнопку профиля с фотографией в правом верхнем углу, откроется меню профиля")
     public UserProfilePopup open() {
-        chromeDriver
-                .findElement(userProfileButton)
-                .click();
-        return new UserProfilePopup();
+        userProfileButton.click();
+        return new UserProfilePopup(webDriver);
     }
 
-    public void clickOnLogOut() {
-        waitFor(signOutButton);
-        chromeDriver
-                .findElement(signOutButton)
-                .click();
+    @Step("Нажать кнопку Sign Out чтобы выйти из профиля")
+    public void clickOnSignOut() {
+        waiter.waitFor(signOutButton);
+        signOutButton.click();
     }
 
+    @Step("Проверить что в правом углу экрана появилась кнопка профиля с фотографией")
     public Boolean isDisplayed() {
-        return chromeDriver
-                .findElement(userProfileButton).isDisplayed();
+        return userProfileButton.isDisplayed();
     }
 }
