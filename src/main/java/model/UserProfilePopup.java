@@ -15,6 +15,8 @@ public class UserProfilePopup {
     private WebElement userProfileButton;
     @FindBy(xpath = "//form[@class=\"logout-form\"]/descendant::button[@type=\"submit\"]")
     private WebElement signOutButton;
+    @FindBy(xpath = "//details-menu[@class=\"dropdown-menu dropdown-menu-sw\"]/descendant::a[@href=\"/mrlis89?tab=repositories\"]")
+    private WebElement yourRepositoriesButton;
 
     public UserProfilePopup(WebDriver webDriver) {
         this.webDriver = webDriver;
@@ -32,6 +34,12 @@ public class UserProfilePopup {
     public void clickOnSignOut() {
         waiter.waitFor(signOutButton);
         signOutButton.click();
+    }
+    @Step("Нажать кнопку Your repositories чтобы открыть окно с проектами пользователя")
+    public YourRepositoriesPage openRepositories() {
+        waiter.waitFor(yourRepositoriesButton);
+        yourRepositoriesButton.click();
+        return new YourRepositoriesPage(webDriver);
     }
 
     @Step("Проверить что в правом углу экрана появилась кнопка профиля с фотографией")

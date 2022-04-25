@@ -23,13 +23,13 @@ public class AuthorizationPage {
         PageFactory.initElements(webDriver, this);
     }
 
-    @Step("Ввести логин из файла gitHubUser.yaml")
+    @Step("Ввести логин")
     public void enterLogin(String login) {
         waiter.waitFor(loginField);
         loginField.sendKeys(login);
     }
 
-    @Step("Ввести пароль из файла gitHubUser.yaml")
+    @Step("Ввести пароль")
     public void enterPassword(String password) {
         passwordField.sendKeys(password);
     }

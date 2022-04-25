@@ -5,27 +5,21 @@ import io.qameta.allure.Feature;
 import model.HomePage;
 import model.NavigationPanel;
 import model.UserProfilePopup;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.openqa.selenium.Dimension;
+import net.bytebuddy.build.Plugin;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.annotations.*;
 
 import java.io.IOException;
 
-import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class userAuthorizationTest {
-
+public class BaseTest {
     UserAccount userAccount;
     WebDriver chromeDriver;
 
-    @BeforeAll
+    @BeforeSuite
     void setupLoginAndPasswordFromFile() throws IOException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("user-data-dir=/cookies");
@@ -35,9 +29,9 @@ class userAuthorizationTest {
         userAccount = UserAccount.getUserAccount();
     }
 
+    @Test
     @Description("Пользователь проходит авторизацию c корректными логином и паролем")
     @Feature("Authorization")
-    @Test
     void UserCanAuthorizeWithCorrectCredentials() {
         new HomePage(chromeDriver).open();
         var navigationPanel = new NavigationPanel(chromeDriver).open();
@@ -48,7 +42,7 @@ class userAuthorizationTest {
         assertThat(new UserProfilePopup(chromeDriver).isDisplayed()).isTrue();
     }
 
-    @AfterAll
+    @AfterSuite
     void UserLogOut() {
         var userProfilePopup = new UserProfilePopup(chromeDriver).open();
         userProfilePopup.clickOnSignOut();
