@@ -19,18 +19,25 @@ public class CreateIssue extends BaseTest {
 
     @Test
     @Description("Пользователь создает новую задачу для указанного репозитория")
-    @Feature("Authorization")
-    void UserCan() {
-
+    @Feature("Issues")
+    void UserCanCreateNewIssue() {
+        //given
+        String issueTitle = "test123";
+        String issueComment = "some comment";
         var userProfilePopup = new UserProfilePopup(chromeDriver).open();
-        var repos = userProfilePopup.openRepositories();
-        var repo = repos.openRepository("forAutotest");
+        var repositoriesPage = userProfilePopup.openRepositories();
+        var repo = repositoriesPage.openRepository(userAccount.getRepository());
         var issuesTab = repo.openIssuesTab();
         var issueCreation = issuesTab.openIssueCreationWindow();
-        issueCreation.enterIssueTitle("test123");
-        issueCreation.enterIssueComment("some comment");
+
+        //when
+        issueCreation.enterIssueTitle(issueTitle);
+        issueCreation.enterIssueComment(issueComment);
         issueCreation.submit();
-        repo.openIssuesTab();
-        assertThat(issuesTab.containsIssueWithTitle("test123")).isTrue();
+        var issue = repo.openIssuesTab().openIssueWithTitle(issueTitle);
+
+        //then
+        assertThat(issue.containsIssueWithTitle(issueTitle)).isTrue();
+        assertThat(issue.containsIssueWithComment(issueComment)).isTrue();
     }
 }

@@ -1,5 +1,6 @@
 package model;
 
+import common.Page;
 import common.Waiter;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
@@ -9,13 +10,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 
-public class YourRepositoriesPage {
-    private final WebDriver webDriver;
-    private Waiter waiter;
+public class YourRepositoriesPage extends Page {
 
     public YourRepositoriesPage(WebDriver webDriver) {
-        this.webDriver = webDriver;
-        waiter = new Waiter(webDriver);
+        super(webDriver);
     }
 
     @Step("Нажать кнопку Issues чтобы открыть окно с задачами по проекиу")

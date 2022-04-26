@@ -1,5 +1,6 @@
 package model;
 
+import common.Page;
 import common.Waiter;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
@@ -8,16 +9,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class IssueCreationWindow {
-    private final WebDriver webDriver;
-    private Waiter waiter;
+public class IssueCreationWindow extends Page {
     @FindBy(xpath = "//button[contains(text(),'Submit new issue') and @class=\"btn-primary btn\"]")
     private WebElement submitNewIssue;
 
     public IssueCreationWindow(WebDriver webDriver) {
-        this.webDriver = webDriver;
-        waiter = new Waiter(webDriver);
-        PageFactory.initElements(webDriver, this);
+        super(webDriver);
     }
 
     @Step("Ввести заголовок для новой задачи")

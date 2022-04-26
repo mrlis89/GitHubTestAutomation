@@ -19,7 +19,7 @@ public class BaseTest {
     UserAccount userAccount;
     WebDriver chromeDriver;
 
-    @BeforeSuite
+    @BeforeTest
     void setupLoginAndPasswordFromFile() throws IOException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("user-data-dir=/cookies");
@@ -33,16 +33,21 @@ public class BaseTest {
     @Description("Пользователь проходит авторизацию c корректными логином и паролем")
     @Feature("Authorization")
     void UserCanAuthorizeWithCorrectCredentials() {
+        //given
         new HomePage(chromeDriver).open();
         var navigationPanel = new NavigationPanel(chromeDriver).open();
         var authPage = navigationPanel.clickOnSignIn();
+
+        //when
         authPage.enterLogin(userAccount.getLogin());
         authPage.enterPassword(userAccount.getPassword());
         authPage.clickSignIn();
+
+        //then
         assertThat(new UserProfilePopup(chromeDriver).isDisplayed()).isTrue();
     }
 
-    @AfterSuite
+    @AfterTest
     void UserLogOut() {
         var userProfilePopup = new UserProfilePopup(chromeDriver).open();
         userProfilePopup.clickOnSignOut();
