@@ -23,7 +23,7 @@ public class BaseTest {
     void setupLoginAndPasswordFromFile() throws IOException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("user-data-dir=/cookies");
-        options.addArguments("--window-size=1024,768");
+        options.addArguments("--window-size=1000,1000");
 
         chromeDriver = new ChromeDriver(options);
         userAccount = UserAccount.getUserAccount();

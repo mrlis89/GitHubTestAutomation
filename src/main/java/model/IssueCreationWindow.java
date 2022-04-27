@@ -1,17 +1,18 @@
 package model;
 
+import common.Issue;
 import common.Page;
-import common.Waiter;
+import common.Screenshot;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+
+import java.io.ByteArrayInputStream;
 
 public class IssueCreationWindow extends Page {
     @FindBy(xpath = "//button[contains(text(),'Submit new issue') and @class=\"btn-primary btn\"]")
-    private WebElement submitNewIssue;
+    private WebElement submitNewIssueButton;
 
     public IssueCreationWindow(WebDriver webDriver) {
         super(webDriver);
@@ -32,9 +33,17 @@ public class IssueCreationWindow extends Page {
     }
 
     @Step("Нажать кнопку Submit new issue чтобы завершить создание новой задачи")
-    public IssueCreationWindow submit() {
-        waiter.waitFor(submitNewIssue);
-        submitNewIssue.click();
+    public void submit() {
+        waiter.waitFor(submitNewIssueButton);
+        submitNewIssueButton.click();
+    }
+
+    @Step("Добавить новую задачу, введя для нее имя и комментарий")
+    public IssueCreationWindow addIssue(Issue issueToAdd) {
+        enterIssueTitle(issueToAdd.getTitle());
+        enterIssueComment(issueToAdd.getComment());
+        submit();
+        new Screenshot(webDriver).withName("Задача с заполненными полями");
         return new IssueCreationWindow(webDriver);
     }
 }

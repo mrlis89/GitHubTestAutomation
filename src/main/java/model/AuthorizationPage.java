@@ -1,6 +1,7 @@
 package model;
 
 import common.Page;
+import common.Screenshot;
 import common.Waiter;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
@@ -33,6 +34,7 @@ public class AuthorizationPage extends Page {
 
     @Step("Нажать зеленую кнопку Sign In")
     public void clickSignIn() {
+        new Screenshot(webDriver).withName("Введенные данные пользователя");
         signInBtn.click();
     }
 }

@@ -1,17 +1,12 @@
 package dto;
 
+import common.Issue;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
-import model.HomePage;
-import model.NavigationPanel;
 import model.UserProfilePopup;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.*;
 
-import java.io.IOException;
-
+import static common.Randomizer.generateString;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -22,8 +17,10 @@ public class CreateIssue extends BaseTest {
     @Feature("Issues")
     void UserCanCreateNewIssue() {
         //given
-        String issueTitle = "test123";
-        String issueComment = "some comment";
+        var userIssue = Issue.builder()
+                .title(generateString())
+                .comment(generateString())
+                .build();
         var userProfilePopup = new UserProfilePopup(chromeDriver).open();
         var repositoriesPage = userProfilePopup.openRepositories();
         var repo = repositoriesPage.openRepository(userAccount.getRepository());
@@ -31,13 +28,13 @@ public class CreateIssue extends BaseTest {
         var issueCreation = issuesTab.openIssueCreationWindow();
 
         //when
-        issueCreation.enterIssueTitle(issueTitle);
-        issueCreation.enterIssueComment(issueComment);
-        issueCreation.submit();
-        var issue = repo.openIssuesTab().openIssueWithTitle(issueTitle);
+        issueCreation.addIssue(userIssue);
+        var issuePage = repo
+                .openIssuesTab()
+                .openIssueWithTitle(userIssue.getTitle());
+        var issueFromUI = issuePage.getIssueFromUI();
 
         //then
-        assertThat(issue.containsIssueWithTitle(issueTitle)).isTrue();
-        assertThat(issue.containsIssueWithComment(issueComment)).isTrue();
+        assertThat(userIssue).isEqualTo(issueFromUI);
     }
 }

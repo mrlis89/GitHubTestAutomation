@@ -1,6 +1,7 @@
 package model;
 
 import common.Page;
+import common.Screenshot;
 import common.Waiter;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
@@ -35,12 +36,14 @@ public class UserProfilePopup extends Page {
     @Step("Нажать кнопку Your repositories чтобы открыть окно с проектами пользователя")
     public YourRepositoriesPage openRepositories() {
         waiter.waitFor(yourRepositoriesButton);
+        new Screenshot(webDriver).withName("Выпадающее меню");
         yourRepositoriesButton.click();
         return new YourRepositoriesPage(webDriver);
     }
 
     @Step("Проверить что в правом углу экрана появилась кнопка профиля с фотографией")
     public Boolean isDisplayed() {
+        new Screenshot(webDriver).withName("Пользователь авторизован");
         return userProfileButton.isDisplayed();
     }
 }
