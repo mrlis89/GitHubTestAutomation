@@ -1,6 +1,7 @@
 package model;
 
 
+import common.Page;
 import common.Waiter;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
@@ -8,18 +9,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class NavigationPanel {
-    private final WebDriver webDriver;
-    private final Waiter waiter;
+public class NavigationPanel extends Page {
     @FindBy(xpath = "//button[@aria-label=\"Toggle navigation\"]")
     private WebElement navigationButton;
     @FindBy(xpath = "//a[@href=\"/login\"]")
     private WebElement loginButton;
 
     public NavigationPanel(WebDriver webDriver) {
-        this.webDriver = webDriver;
-        waiter = new Waiter(webDriver);
-        PageFactory.initElements(webDriver, this);
+        super(webDriver);
     }
 
     @Step("Нажать кнопку навигации(3 горизонтальные линии) в правом верхнем углу")

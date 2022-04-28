@@ -13,10 +13,11 @@ import java.io.IOException;
 public class UserAccount {
     private String login;
     private String password;
+    private String repository;
 
     public static UserAccount getUserAccount() throws IOException {
         ObjectMapper mapper = new YAMLMapper();
-        return mapper.readValue(new File("credentials/gitHubUser.yaml"), dto.UserAccount.class);
+        return mapper.readValue(new File("gitHubUser/gitHubUser.yaml"), dto.UserAccount.class);
     }
 }
 
