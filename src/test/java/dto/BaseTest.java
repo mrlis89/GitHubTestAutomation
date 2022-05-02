@@ -44,6 +44,7 @@ public class BaseTest {
             return navigationPanel.clickOnSignIn();
         }).when("Введены логин и пароль", (authPage) -> {
             authPage.authorize(userAccount);
+            return authPage;
         }).then("Авторизация успешна, доступна панель пролфиля пользователя", () -> {
         assertThat(new UserProfilePopup(chromeDriver).isDisplayed()).isTrue();
         });
