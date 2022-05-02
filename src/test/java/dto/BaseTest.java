@@ -1,8 +1,10 @@
 package dto;
 
+import common.GWT;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
+import model.AuthorizationPage;
 import model.HomePage;
 import model.NavigationPanel;
 import model.UserProfilePopup;
@@ -36,16 +38,15 @@ public class BaseTest {
     @Description("Пользователь проходит авторизацию c корректными логином и паролем")
     @Feature("Authorization")
     void UserCanAuthorizeWithCorrectCredentials() {
-        //given
-        new HomePage(chromeDriver).open();
-        var navigationPanel = new NavigationPanel(chromeDriver).open();
-        var authPage = navigationPanel.clickOnSignIn();
-
-        //when
-        authPage.authorize(userAccount);
-
-        //then
+        new GWT<AuthorizationPage>().given("Открыта страница авторизации, даны логин и пароль", () -> {
+            new HomePage(chromeDriver).open();
+            var navigationPanel = new NavigationPanel(chromeDriver).open();
+            return navigationPanel.clickOnSignIn();
+        }).when("Введены логин и пароль", (authPage) -> {
+            authPage.authorize(userAccount);
+        }).then("Авторизация успешна, доступна панель пролфиля пользователя", () -> {
         assertThat(new UserProfilePopup(chromeDriver).isDisplayed()).isTrue();
+        });
     }
 
     @AfterSuite

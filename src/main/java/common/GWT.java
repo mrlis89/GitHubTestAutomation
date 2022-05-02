@@ -14,9 +14,16 @@ public class GWT <T> {
         actual = fun.run(given);
         return this;
     }
+    public GWT<T> when(String description, IWhenVoid<T> fun){
+        fun.run(given);
+        return this;
+    }
 
     public void then(String description){
         assertThat(given).isEqualTo(actual);
+    }
+    public void then(String description, Runnable assertion){
+        assertion.run();
     }
 
 
