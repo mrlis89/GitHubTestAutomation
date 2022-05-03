@@ -1,4 +1,4 @@
-Add user credentials to /credentials/gitHubUser.yaml
+Add user credentials to /gitHubUser/gitHubUser.yaml
 
 Run this command to create Allure report
 

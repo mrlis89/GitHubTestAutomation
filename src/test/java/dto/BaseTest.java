@@ -1,6 +1,7 @@
 package dto;
 
 import common.GWT;
+import common.ScreenshotTaker;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
@@ -29,7 +30,7 @@ public class BaseTest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("user-data-dir=/cookies");
         options.addArguments("--window-size=1000,1000");
-
+        ScreenshotTaker.getInstance();
         chromeDriver = new ChromeDriver(options);
         userAccount = UserAccount.getUserAccount();
     }
@@ -38,16 +39,16 @@ public class BaseTest {
     @Description("Пользователь проходит авторизацию c корректными логином и паролем")
     @Feature("Authorization")
     void UserCanAuthorizeWithCorrectCredentials() {
-        new GWT<AuthorizationPage>().given("Открыта страница авторизации, даны логин и пароль", () -> {
-            new HomePage(chromeDriver).open();
-            var navigationPanel = new NavigationPanel(chromeDriver).open();
-            return navigationPanel.clickOnSignIn();
-        }).when("Введены логин и пароль", (authPage) -> {
-            authPage.authorize(userAccount);
-            return authPage;
-        }).then("Авторизация успешна, доступна панель пролфиля пользователя", () -> {
-        assertThat(new UserProfilePopup(chromeDriver).isDisplayed()).isTrue();
-        });
+        new GWT<AuthorizationPage>(chromeDriver)
+                .given("Открыта страница авторизации, даны логин и пароль", () -> {
+                    new HomePage(chromeDriver).open();
+                    var navigationPanel = new NavigationPanel(chromeDriver).open();
+                    return navigationPanel.clickOnSignIn();
+                }).when("Введены логин и пароль", (authPage) -> {
+                    authPage.authorize(userAccount);
+                }).then("Авторизация успешна, доступна панель пролфиля пользователя", () -> {
+                    assertThat(new UserProfilePopup(chromeDriver).isDisplayed()).isTrue();
+                });
     }
 
     @AfterSuite

@@ -1,6 +1,6 @@
 package common;
 
 @FunctionalInterface
-public interface IWhen<T> {
+public interface IWhenReturn<T> {
     public T run(T given);
 }

@@ -2,13 +2,11 @@ package model;
 
 import common.Issue;
 import common.Page;
-import common.Screenshot;
-import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.io.ByteArrayInputStream;
 
 public class IssueCreationWindow extends Page {
     @FindBy(xpath = "//button[contains(text(),'Submit new issue') and @class=\"btn-primary btn\"]")
@@ -43,7 +41,6 @@ public class IssueCreationWindow extends Page {
         enterIssueTitle(issueToAdd.getTitle());
         enterIssueComment(issueToAdd.getComment());
         submit();
-        new Screenshot(webDriver).withName("Задача с заполненными полями");
         return new IssueCreationWindow(webDriver);
     }
 }
