@@ -1,13 +1,11 @@
 package model;
 
 import common.Page;
-import common.Screenshot;
-import common.Waiter;
+import dto.UserAccount;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class AuthorizationPage extends Page {
     @FindBy(xpath = "//input[@id=\"login_field\"]")
@@ -34,7 +32,12 @@ public class AuthorizationPage extends Page {
 
     @Step("Нажать зеленую кнопку Sign In")
     public void clickSignIn() {
-        new Screenshot(webDriver).withName("Введенные данные пользователя");
         signInBtn.click();
+    }
+
+    public void authorize(UserAccount userAccount) {
+        enterLogin(userAccount.getLogin());
+        enterPassword(userAccount.getPassword());
+        clickSignIn();
     }
 }

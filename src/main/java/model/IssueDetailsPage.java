@@ -3,18 +3,21 @@ package model;
 import common.Issue;
 import common.Page;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class IssuesDetailsPage extends Page {
+public class IssueDetailsPage extends Page {
     @FindBy(xpath = "//span[@class=\"js-issue-title markdown-title\"]")
     private WebElement issueTitle;
     @FindBy(xpath = "//td[@class=\"d-block comment-body markdown-body  js-comment-body\"]/descendant::p")
     private WebElement issueComment;
+    @FindBy(xpath = "//strong[text()='Delete issue']")
+    private WebElement deleteIssueButton;
+    @FindBy(xpath = "//button[@type=\"submit\" and @name=\"verify_delete\"]")
+    private WebElement submitDeleting;
 
-    public IssuesDetailsPage(WebDriver webDriver) {
+    public IssueDetailsPage(WebDriver webDriver) {
         super(webDriver);
     }
 
@@ -35,5 +38,13 @@ public class IssuesDetailsPage extends Page {
     private String getCommentFromUI() {
         waiter.waitFor(issueComment);
         return issueComment.getText();
+    }
+
+    @Step
+    public void deleteIssue() {
+        waiter.waitFor(deleteIssueButton);
+        deleteIssueButton.click();
+        waiter.waitFor(submitDeleting);
+        submitDeleting.click();
     }
 }
