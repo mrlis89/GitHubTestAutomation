@@ -1,24 +1,25 @@
 package model;
 
 import common.Page;
+import common.Selector;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 public class IssuesTab extends Page {
-    @FindBy(xpath = "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]")
-    private WebElement newIssueButton;
+    private Selector newIssueButton = new Selector(
+            webDriver,
+            "Кнопка для создания новой задачи",
+            "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]"
+    );
 
     public IssuesTab(WebDriver webDriver) {
         super(webDriver);
     }
 
-    @Step("Нажать кнопку New Issue чтобы открыть окно для создания новой задачи")
     public IssueCreationWindow openIssueCreationWindow() {
-        waiter.waitFor(newIssueButton);
         newIssueButton.click();
         return new IssueCreationWindow(webDriver);
     }
