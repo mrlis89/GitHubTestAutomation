@@ -39,9 +39,9 @@ public class IssueTests extends BaseTest {
                     return userIssue;
                 }).when("Задача добавлена", (givenIssue) -> {
                     issueCreation.addIssue(givenIssue);
-                    var issuePage = userRepository
-                            .openIssuesTab()
-                            .openIssueWithTitle(givenIssue.getTitle());
+                    var issuesTab = userRepository.openIssuesTab();
+                    issuesTab.setIssueToOpen(givenIssue);
+                    var issuePage = issuesTab.openIssue();
                     return issuePage.getIssueFromUI();
                 }).then("Добавленная задача должна совпадать с исходной");
     }
@@ -56,8 +56,8 @@ public class IssueTests extends BaseTest {
                         userRepository
                                 .openIssuesTab())
                 .when("Открываем задачу и нажимаем кнопку Delete issue", (issueTab) -> {
-                    issueTab
-                            .openIssueWithTitle(userIssue.getTitle())
+                    issueTab.setIssueToOpen(userIssue);
+                            issueTab.openIssue()
                             .deleteIssue();
                     return issueTab;
 

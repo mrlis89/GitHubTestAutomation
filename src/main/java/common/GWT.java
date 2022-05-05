@@ -2,7 +2,6 @@ package common;
 
 import org.openqa.selenium.WebDriver;
 
-import static common.ScreenshotTaker.takeScreenshot;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GWT<T> {
@@ -46,13 +45,11 @@ public class GWT<T> {
         assertion.run(actual);
     }
 
-    private void runGivenWhenFunc() {
+    private void runGivenWhenFunc()  {
         given = givenFunc.run();
-        takeScreenshot(webDriver);
         if (whenFunc != null) {
             actual = whenFunc.run(given);
         } else whenVoidFunc.run(given);
-        takeScreenshot(webDriver);
     }
 
 

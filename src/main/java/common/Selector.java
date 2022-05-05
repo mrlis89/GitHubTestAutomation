@@ -1,29 +1,38 @@
 package common;
 
-import io.qameta.allure.Step;
+import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class Selector extends Page {
-    private final String selectorName;
-    private final String elementPath;
-    private WebElement webElement;
+import static common.ScreenshotTaker.takeScreenshot;
+import static io.qameta.allure.Allure.step;
 
-    public Selector(WebDriver webDriver, String description, String elementPath) {
-        super(webDriver);
-        this.selectorName = description;
-        this.elementPath = elementPath;
-        webElement = waiter.waitAndInit(By.xpath(elementPath));
+@AllArgsConstructor
+public class Selector {
+    private WebDriver webDriver;
+    private String selectorName;
+    private String elementPath;
+
+    private WebElement initWebElement() {
+        Waiter waiter = new Waiter(webDriver);
+        return waiter.waitAndInit(By.xpath(elementPath));
     }
 
-    @Step("Нажимаем на {selectorName}")
     public void click() {
-        webElement.click();
+        step("Нажимаем на " + selectorName, () -> {
+            var element = initWebElement();
+            takeScreenshot(webDriver, element);
+            element.click();
+        });
     }
 
     public void input(String keys) {
-        webElement.sendKeys(keys);
+        step("Вводим в поле " + selectorName + "следующие данные:" + keys, () -> {
+            var element = initWebElement();
+            takeScreenshot(webDriver, element);
+            element.sendKeys(keys);
+        });
     }
 
 }
