@@ -1,26 +1,31 @@
 package model;
 
-import common.Issue;
-import common.Page;
-import common.Selector;
-import io.qameta.allure.Step;
-import lombok.Setter;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
+import common.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
 
 public class IssuesTab extends Page {
-    @Setter
-    private Issue issueToOpen;
+    private final Issue issueToOpen;
     private Selector newIssueButton = new Selector(
             webDriver,
             "Кнопка для создания новой задачи",
             "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]"
     );
+    private NameSelector issueSelector = new NameSelector(
+            webDriver,
+            "Задача с именем $Name",
+            "//a[@data-hovercard-type=\"issue\" and contains(text(),'$Name')]"
+    );
+    private ListSelector issueList = new ListSelector(
+            webDriver,
+            "Список задач",
+            "//a[@data-hovercard-type=\"issue\"]"
+    );
 
-    public IssuesTab(WebDriver webDriver) {
+    public IssuesTab(WebDriver webDriver, Issue issueToOpen) {
         super(webDriver);
+        this.issueToOpen = issueToOpen;
     }
 
     public IssueCreationWindow openIssueCreationWindow() {
@@ -28,15 +33,11 @@ public class IssuesTab extends Page {
         return new IssueCreationWindow(webDriver);
     }
 
-    @Step("Открыть задачу с именем, написанном при создании")
     public IssueDetailsPage openIssue() {
-        WebElement issue = waiter.waitAndInit(By.xpath("//a[@data-hovercard-type=\"issue\" and contains(text(),'" + issueToOpen.getTitle() + "')]"));
-        issue.click();
+        issueSelector.setNameAndClick(issueToOpen.getTitle());
         return new IssueDetailsPage(webDriver);
     }
-
-    @Step("Убедиться что ранее удаленная задача отсутствует в списке задач")
-    public void hasNoIssueWithTitle(String issueTitle) throws NoSuchElementException {
-        webDriver.findElement(By.xpath("//a[@data-hovercard-type=\"issue\" and contains(text(),'" + issueTitle + "')]"));
+    public ArrayList<String> getIssueTitleList() {
+        return issueList.getList();
     }
 }

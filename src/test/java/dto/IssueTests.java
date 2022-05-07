@@ -8,11 +8,12 @@ import model.IssueCreationWindow;
 import model.IssuesTab;
 import model.RepositoryPage;
 import model.UserProfilePopup;
-import org.openqa.selenium.NoSuchElementException;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static common.Randomizer.generateString;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class IssueTests extends BaseTest {
     private Issue userIssue;
@@ -33,14 +34,15 @@ public class IssueTests extends BaseTest {
                     var userProfilePopup = new UserProfilePopup(chromeDriver).open();
                     var repositoriesPage = userProfilePopup.openRepositories();
                     var repositoryPage = repositoriesPage.openRepository(userAccount.getRepository());
-                    var issuesTab = repositoryPage.openIssuesTab();
+                    repositoryPage.openIssuesTab();
+                    var issuesTab = new IssuesTab(chromeDriver, userIssue);
                     issuesTab.openIssueCreationWindow();
                     this.userIssue = userIssue;
                     return userIssue;
                 }).when("Задача добавлена", (givenIssue) -> {
                     issueCreation.addIssue(givenIssue);
-                    var issuesTab = userRepository.openIssuesTab();
-                    issuesTab.setIssueToOpen(givenIssue);
+                    userRepository.openIssuesTab();
+                    var issuesTab = new IssuesTab(chromeDriver, givenIssue);
                     var issuePage = issuesTab.openIssue();
                     return issuePage.getIssueFromUI();
                 }).then("Добавленная задача должна совпадать с исходной");
@@ -51,22 +53,23 @@ public class IssueTests extends BaseTest {
     @Description("Пользователь может удалить задачу из списка")
     void UserCanDeleteIssue() {
         RepositoryPage userRepository = new RepositoryPage(chromeDriver);
-        new GWT<IssuesTab>(chromeDriver)
+        var issuesTab = new IssuesTab(chromeDriver, userIssue);
+        new GWT<List<String>>(chromeDriver)
                 .given("Имя задачи для удаления, открыто окно со списком задач", () ->
-                        userRepository
-                                .openIssuesTab())
-                .when("Открываем задачу и нажимаем кнопку Delete issue", (issueTab) -> {
-                    issueTab.setIssueToOpen(userIssue);
-                            issueTab.openIssue()
-                            .deleteIssue();
-                    return issueTab;
-
+                {
+                    userRepository.openIssuesTab();
+                    return issuesTab.getIssueTitleList();
                 })
-                .then("Задача больше не отображается в списке задач", (issuesTab) ->
-                        assertThatThrownBy(
-                                () ->issuesTab.hasNoIssueWithTitle(userIssue.getTitle())
-                        ).isInstanceOf(NoSuchElementException.class)
-                );
+                .when("Открываем задачу и нажимаем кнопку Delete issue", () -> {
+                    issuesTab
+                            .openIssue()
+                            .deleteIssue();
+                    userRepository.openIssuesTab();
+                    return issuesTab.getIssueTitleList();
+                })
+                .then("Задача больше не отображается в списке задач", (givenList, listAfterDeleting) ->{
+                        assertThat(givenList.size()-1).isEqualTo(listAfterDeleting.size());
+                });
     }
 
 

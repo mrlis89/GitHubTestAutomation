@@ -1,5 +1,6 @@
 package common;
 
+import common.Interfaces.*;
 import org.openqa.selenium.WebDriver;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,6 +11,7 @@ public class GWT<T> {
     private T actual;
     private IGiven<T> givenFunc;
     private IWhenReturn<T> whenFunc;
+    private IWhenReturnNoParam<T> whenFuncNoParam;
     private IWhenVoid<T> whenVoidFunc;
 
     public GWT(WebDriver webDriver) {
@@ -23,6 +25,10 @@ public class GWT<T> {
 
     public GWT<T> when(String description, IWhenReturn<T> func) {
         whenFunc = func;
+        return this;
+    }
+    public GWT<T> when(String description, IWhenReturnNoParam<T> func) {
+        whenFuncNoParam = func;
         return this;
     }
 
@@ -42,13 +48,15 @@ public class GWT<T> {
     }
     public void then(String description, IThenVoid<T> assertion) {
         runGivenWhenFunc();
-        assertion.run(actual);
+        assertion.run(given, actual);
     }
 
     private void runGivenWhenFunc()  {
         given = givenFunc.run();
         if (whenFunc != null) {
             actual = whenFunc.run(given);
+        } else if (whenFuncNoParam != null) {
+            actual = whenFuncNoParam.run();
         } else whenVoidFunc.run(given);
     }
 

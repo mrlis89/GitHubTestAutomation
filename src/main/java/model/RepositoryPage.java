@@ -16,9 +16,8 @@ public class RepositoryPage extends Page {
     }
 
     @Step("Нажать кнопку Issues чтобы открыть окно с задачами по проекту")
-    public IssuesTab openIssuesTab() {
+    public void openIssuesTab() {
         waiter.waitFor(issueTab);
         issueTab.click();
-        return new IssuesTab(webDriver);
     }
 }
