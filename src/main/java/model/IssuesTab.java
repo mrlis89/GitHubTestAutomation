@@ -1,22 +1,33 @@
 package model;
 
-import common.*;
+import common.Interfaces.Selector;
+import common.Issue;
+import common.Page;
+import common.selectors.ListSelector;
+import common.selectors.NameSelector;
+import common.selectors.SelectorBase;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
 
+import static common.selectors.SelectorInitializer.initSelectors;
+
 public class IssuesTab extends Page {
+
     private final Issue issueToOpen;
-    private Selector newIssueButton = new Selector(
-            webDriver,
-            "Кнопка для создания новой задачи",
-            "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]"
-    );
+
+    @Selector(
+            selectorName = "Кнопка для создания новой задачи",
+            elementPath = "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]"
+    )
+    private SelectorBase newIssueButton;
+
     private NameSelector issueSelector = new NameSelector(
             webDriver,
             "Задача с именем $Name",
             "//a[@data-hovercard-type=\"issue\" and contains(text(),'$Name')]"
     );
+
     private ListSelector issueList = new ListSelector(
             webDriver,
             "Список задач",
@@ -26,6 +37,7 @@ public class IssuesTab extends Page {
     public IssuesTab(WebDriver webDriver, Issue issueToOpen) {
         super(webDriver);
         this.issueToOpen = issueToOpen;
+        initSelectors(webDriver,this);
     }
 
     public IssueCreationWindow openIssueCreationWindow() {

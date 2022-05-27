@@ -1,5 +1,6 @@
-package common;
+package common.selectors;
 
+import common.Waiter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,7 +11,7 @@ import java.util.List;
 import static common.ScreenshotTaker.takeScreenshot;
 import static io.qameta.allure.Allure.step;
 
-public class ListSelector extends Selector {
+public class ListSelector extends SelectorBase {
 
     public ListSelector(WebDriver webDriver, String selectorName, String elementPath) {
         super(webDriver, selectorName, elementPath);

@@ -40,13 +40,13 @@ public class ScreenshotTaker {
     private static byte[] ImageWithOutlinedElement(File file, WebElement webElement) throws IOException {
         BufferedImage image = ImageIO.read(file);
         Rectangle elementBorder = webElement.getRect();
-        addRectangle(image, elementBorder);
+        addRectangleToImage(image, elementBorder);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(image, "png", outputStream);
         return outputStream.toByteArray();
     }
 
-    private static void addRectangle(BufferedImage img, Rectangle rectangle) {
+    private static void addRectangleToImage(BufferedImage img, Rectangle rectangle) {
         var graphics = (Graphics2D) img.getGraphics();
         graphics.setColor(Color.RED);
         graphics.setStroke(new BasicStroke(3));

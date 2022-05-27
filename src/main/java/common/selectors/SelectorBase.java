@@ -1,5 +1,6 @@
-package common;
+package common.selectors;
 
+import common.Waiter;
 import lombok.AllArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,7 +10,7 @@ import static common.ScreenshotTaker.takeScreenshot;
 import static io.qameta.allure.Allure.step;
 
 @AllArgsConstructor
-public class Selector {
+public class SelectorBase {
     protected WebDriver webDriver;
     protected String selectorName;
     protected String elementPath;
