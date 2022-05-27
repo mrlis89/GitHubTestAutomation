@@ -12,7 +12,7 @@ public class UserProfilePopup extends Page {
     private WebElement userProfileButton;
     @FindBy(xpath = "//form[@class=\"logout-form\"]/descendant::button[@type=\"submit\"]")
     private WebElement signOutButton;
-    @FindBy(xpath = "//details-menu[@class=\"dropdown-menu dropdown-menu-sw\"]/descendant::a[@href=\"/mrlis89?tab=repositories\"]")
+    @FindBy(xpath = "//details-menu[@class=\"dropdown-menu dropdown-menu-sw\"]/descendant::a[contains(text(), \"Your repositories\")]")
     private WebElement yourRepositoriesButton;
 
     public UserProfilePopup(WebDriver webDriver) {
