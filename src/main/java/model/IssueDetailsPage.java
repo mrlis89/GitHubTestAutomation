@@ -1,21 +1,33 @@
 package model;
 
+import common.Interfaces.Selector;
 import common.Issue;
 import common.Page;
+import common.selectors.BaseSelector;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 public class IssueDetailsPage extends Page {
-    @FindBy(xpath = "//span[@class=\"js-issue-title markdown-title\"]")
-    private WebElement issueTitle;
-    @FindBy(xpath = "//td[@class=\"d-block comment-body markdown-body  js-comment-body\"]/descendant::p")
-    private WebElement issueComment;
-    @FindBy(xpath = "//strong[text()='Delete issue']")
-    private WebElement deleteIssueButton;
-    @FindBy(xpath = "//button[@type=\"submit\" and @name=\"verify_delete\"]")
-    private WebElement submitDeleting;
+    @Selector(
+            selectorName = "Заголовок задачи",
+            elementXPath = "//span[@class=\"js-issue-title markdown-title\"]"
+    )
+    private BaseSelector issueTitle;
+    @Selector(
+            selectorName = "Комментарий задачи",
+            elementXPath = "//td[@class=\"d-block comment-body markdown-body  js-comment-body\"]/descendant::p"
+    )
+    private BaseSelector issueComment;
+    @Selector(
+            selectorName = "Удалить задачу",
+            elementXPath = "//strong[text()='Delete issue']"
+    )
+    private BaseSelector deleteIssueButton;
+    @Selector(
+            selectorName = "Подтвердить удаление",
+            elementXPath = "//button[@type=\"submit\" and @name=\"verify_delete\"]"
+    )
+    private BaseSelector submitDeleting;
 
     public IssueDetailsPage(WebDriver webDriver) {
         super(webDriver);
@@ -28,23 +40,17 @@ public class IssueDetailsPage extends Page {
                 .build();
     }
 
-    @Step("Проверить что имя задачи совпадает с именем, написанном при создании")
     private String getTitleFromUI() {
-        waiter.waitFor(issueTitle);
         return issueTitle.getText();
     }
 
-    @Step("Проверить что комментарий задачи совпадает с комментарием, написанном при создании")
     private String getCommentFromUI() {
-        waiter.waitFor(issueComment);
         return issueComment.getText();
     }
 
-    @Step
+    @Step("Удалить задачу с заданным именем")
     public void deleteIssue() {
-        waiter.waitFor(deleteIssueButton);
         deleteIssueButton.click();
-        waiter.waitFor(submitDeleting);
         submitDeleting.click();
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import static common.ScreenshotTaker.takeScreenshot;
 import static io.qameta.allure.Allure.step;
 
-public class ListSelector extends SelectorBase {
+public class ListSelector extends BaseSelector {
 
     public ListSelector(WebDriver webDriver, String selectorName, String elementPath) {
         super(webDriver, selectorName, elementPath);

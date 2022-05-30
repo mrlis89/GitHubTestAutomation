@@ -1,7 +1,6 @@
 package dto;
 
 import common.GWT;
-import common.ScreenshotTaker;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
@@ -30,7 +29,6 @@ public class BaseTest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("user-data-dir=/cookies");
         options.addArguments("--window-size=1000,1000");
-        ScreenshotTaker.getInstance();
         chromeDriver = new ChromeDriver(options);
         userAccount = UserAccount.getUserAccount();
     }

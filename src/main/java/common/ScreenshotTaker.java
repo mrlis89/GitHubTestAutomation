@@ -13,17 +13,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class ScreenshotTaker {
-    private static ScreenshotTaker INSTANCE;
-
-    private ScreenshotTaker() {
-    }
-
-    public static ScreenshotTaker getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ScreenshotTaker();
-        }
-        return INSTANCE;
-    }
 
     @Attachment(value = "Page Screenshot", type = "image/png")
     public static byte[] takeScreenshot(WebDriver webDriver) {

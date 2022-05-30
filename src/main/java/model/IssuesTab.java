@@ -3,14 +3,12 @@ package model;
 import common.Interfaces.Selector;
 import common.Issue;
 import common.Page;
+import common.selectors.BaseSelector;
 import common.selectors.ListSelector;
 import common.selectors.NameSelector;
-import common.selectors.SelectorBase;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
-
-import static common.selectors.SelectorInitializer.initSelectors;
 
 public class IssuesTab extends Page {
 
@@ -18,26 +16,25 @@ public class IssuesTab extends Page {
 
     @Selector(
             selectorName = "Кнопка для создания новой задачи",
-            elementPath = "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]"
+            elementXPath = "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]"
     )
-    private SelectorBase newIssueButton;
+    private BaseSelector newIssueButton;
 
-    private NameSelector issueSelector = new NameSelector(
-            webDriver,
-            "Задача с именем $Name",
-            "//a[@data-hovercard-type=\"issue\" and contains(text(),'$Name')]"
-    );
+    @Selector(
+            selectorName = "Задача с именем $Name",
+            elementXPath = "//a[@data-hovercard-type=\"issue\" and contains(text(),'$Name')]"
+    )
+    private NameSelector issueSelector;
 
-    private ListSelector issueList = new ListSelector(
-            webDriver,
-            "Список задач",
-            "//a[@data-hovercard-type=\"issue\"]"
-    );
+    @Selector(
+            selectorName = "Список задач",
+            elementXPath = "//a[@data-hovercard-type=\"issue\"]"
+    )
+    private ListSelector issueList;
 
     public IssuesTab(WebDriver webDriver, Issue issueToOpen) {
         super(webDriver);
         this.issueToOpen = issueToOpen;
-        initSelectors(webDriver,this);
     }
 
     public IssueCreationWindow openIssueCreationWindow() {
