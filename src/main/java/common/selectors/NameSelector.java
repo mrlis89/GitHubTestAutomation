@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import static common.ScreenshotTaker.takeScreenshot;
 import static io.qameta.allure.Allure.step;
 
-public class NameSelector extends BaseSelector {
+public class NameSelector extends Selector {
 
     public NameSelector(WebDriver webDriver, String selectorName, String elementPath) {
         super(webDriver, selectorName, elementPath);

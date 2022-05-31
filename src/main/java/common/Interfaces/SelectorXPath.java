@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Selector {
+public @interface SelectorXPath {
     String selectorName();
     String elementXPath();
 }

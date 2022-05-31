@@ -11,7 +11,7 @@ import static common.ScreenshotTaker.takeScreenshot;
 import static io.qameta.allure.Allure.step;
 
 @AllArgsConstructor
-public class BaseSelector {
+public class Selector {
     protected WebDriver webDriver;
     protected String selectorName;
     protected String elementPath;
@@ -35,17 +35,24 @@ public class BaseSelector {
     }
 
     public void input(String keys) {
-        step("Вводим в поле: " + selectorName + "следующие данные:" + keys, () -> {
+        step("Вводим в: " + selectorName + " следующие данные: " + keys, () -> {
             var element = initWebElement();
             focusTo(element);
-            takeScreenshot(webDriver, element);
             element.sendKeys(keys);
+            takeScreenshot(webDriver, element);
         });
     }
 
     protected WebElement initWebElement() {
         Waiter waiter = new Waiter(webDriver);
         return waiter.waitAndInit(By.xpath(elementPath));
+    }
+
+    public Boolean isDisplayed() {
+        Waiter waiter = new Waiter(webDriver);
+        return waiter
+                .waitAndInit(By.xpath(elementPath))
+                .isDisplayed();
     }
 
     private void focusTo(WebElement element) {

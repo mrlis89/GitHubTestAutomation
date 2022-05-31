@@ -25,7 +25,7 @@ public class IssueTests extends BaseTest {
         RepositoryPage userRepository = new RepositoryPage(chromeDriver);
         IssueCreationWindow issueCreation = new IssueCreationWindow(chromeDriver);
 
-        new GWT<Issue>(chromeDriver)
+        new GWT<Issue>()
                 .given("Имя и комментарий для задачи, открыто окно для создания задачи", () -> {
                     var userIssue = Issue.builder()
                             .title(generateString())
@@ -54,7 +54,7 @@ public class IssueTests extends BaseTest {
     void UserCanDeleteIssue() {
         RepositoryPage userRepository = new RepositoryPage(chromeDriver);
         var issuesTab = new IssuesTab(chromeDriver, userIssue);
-        new GWT<List<String>>(chromeDriver)
+        new GWT<List<String>>()
                 .given("Имя задачи для удаления, открыто окно со списком задач", () ->
                 {
                     userRepository.openIssuesTab();
@@ -68,7 +68,7 @@ public class IssueTests extends BaseTest {
                     return issuesTab.getIssueTitleList();
                 })
                 .then("Задача больше не отображается в списке задач", (givenList, listAfterDeleting) ->{
-                        assertThat(givenList.size()-1).isEqualTo(listAfterDeleting.size());
+                    assertThat(givenList.size()-1).isEqualTo(listAfterDeleting.size());
                 });
     }
 

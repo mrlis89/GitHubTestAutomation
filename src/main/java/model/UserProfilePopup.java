@@ -1,38 +1,43 @@
 package model;
 
+import common.Interfaces.SelectorXPath;
 import common.Page;
+import common.selectors.Selector;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 
 public class UserProfilePopup extends Page {
-    @FindBy(xpath = "//header[@role=\"banner\"]/descendant::summary[@aria-label=\"View profile and more\"]")
-    private WebElement userProfileButton;
-    @FindBy(xpath = "//form[@class=\"logout-form\"]/descendant::button[@type=\"submit\"]")
-    private WebElement signOutButton;
-    @FindBy(xpath = "//details-menu[@class=\"dropdown-menu dropdown-menu-sw\"]/descendant::a[contains(text(), \"Your repositories\")]")
-    private WebElement yourRepositoriesButton;
+    @SelectorXPath(
+            selectorName = "Кнопка профиля с фотографией в правом верхнем углу",
+            elementXPath = "//header[@role=\"banner\"]/descendant::summary[@aria-label=\"View profile and more\"]"
+    )
+    private Selector userProfileButton;
+    @SelectorXPath(
+            selectorName = "Кнопка Sign Out",
+            elementXPath = "//form[@class=\"logout-form\"]/descendant::button[@type=\"submit\"]"
+    )
+    private Selector signOutButton;
+    @SelectorXPath(
+            selectorName = "Кнопка Your repositories",
+            elementXPath = "//details-menu[@class=\"dropdown-menu dropdown-menu-sw\"]/descendant::a[contains(text(), \"Your repositories\")]"
+    )
+    private Selector yourRepositoriesButton;
 
     public UserProfilePopup(WebDriver webDriver) {
         super(webDriver);
     }
 
-    @Step("Нажать кнопку профиля с фотографией в правом верхнем углу, откроется меню профиля")
     public UserProfilePopup open() {
         userProfileButton.click();
         return new UserProfilePopup(webDriver);
     }
 
-    @Step("Нажать кнопку Sign Out чтобы выйти из профиля")
     public void clickOnSignOut() {
-        waiter.waitFor(signOutButton);
         signOutButton.click();
     }
-    @Step("Нажать кнопку Your repositories чтобы открыть окно с проектами пользователя")
+
     public YourRepositoriesPage openRepositories() {
-        waiter.waitFor(yourRepositoriesButton);
         yourRepositoriesButton.click();
         return new YourRepositoriesPage(webDriver);
     }

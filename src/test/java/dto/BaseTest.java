@@ -37,7 +37,7 @@ public class BaseTest {
     @Description("Пользователь проходит авторизацию c корректными логином и паролем")
     @Feature("Authorization")
     void UserCanAuthorizeWithCorrectCredentials() {
-        new GWT<AuthorizationPage>(chromeDriver)
+        new GWT<AuthorizationPage>()
                 .given("Открыта страница авторизации, даны логин и пароль", () -> {
                     new HomePage(chromeDriver).open();
                     var navigationPanel = new NavigationPanel(chromeDriver).open();
