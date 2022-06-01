@@ -2,8 +2,6 @@ package common;
 
 import common.Interfaces.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class GWT<T> {
     private T given;
     private T actual;
@@ -28,20 +26,16 @@ public class GWT<T> {
         whenVoidFunc = func;
         return this;
     }
-    public void then(String description) {
-        runGivenWhenFunc();
-        assertThat(given).isEqualTo(actual);
-    }
-    public void then(String description, Runnable assertion) {
-        runGivenWhenFunc();
+    public void then(Runnable assertion) {
+        runGWTTest();
         assertion.run();
     }
-    public void then(String description, IThenVoid<T> assertion) {
-        runGivenWhenFunc();
+    public void then(IThenVoid<T> assertion) {
+        runGWTTest();
         assertion.run(given, actual);
     }
 
-    private void runGivenWhenFunc()  {
+    private void runGWTTest()  {
         given = givenFunc.run();
         if (whenFunc != null) {
             actual = whenFunc.run(given);

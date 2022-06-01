@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
+import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BaseTest {
@@ -44,7 +45,8 @@ public class BaseTest {
                     return navigationPanel.clickOnSignIn();
                 }).when("Введены логин и пароль", (authPage) -> {
                     authPage.authorize(userAccount);
-                }).then("Авторизация успешна, доступна панель пролфиля пользователя", () -> {
+                }).then(() -> {
+                    step("Авторизация успешна, доступна панель профиля пользователя");
                     assertThat(new UserProfilePopup(chromeDriver).isDisplayed()).isTrue();
                 });
     }

@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static common.Randomizer.generateString;
+import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IssueTests extends BaseTest {
@@ -45,7 +46,10 @@ public class IssueTests extends BaseTest {
                     var issuesTab = new IssuesTab(chromeDriver, givenIssue);
                     var issuePage = issuesTab.openIssue();
                     return issuePage.getIssueFromUI();
-                }).then("Добавленная задача должна совпадать с исходной");
+                }).then((given, actual) -> {
+                    step("Добавленная задача должна совпадать с исходной");
+                    assertThat(given).isEqualTo(actual);
+                });
     }
 
     @Test
@@ -67,8 +71,9 @@ public class IssueTests extends BaseTest {
                     userRepository.openIssuesTab();
                     return issuesTab.getIssueTitleList();
                 })
-                .then("Задача больше не отображается в списке задач", (givenList, listAfterDeleting) ->{
-                    assertThat(givenList.size()-1).isEqualTo(listAfterDeleting.size());
+                .then((givenList, listAfterDeleting) -> {
+                    step("Задача больше не отображается в списке задач");
+                    assertThat(givenList.size() - 1).isEqualTo(listAfterDeleting.size());
                 });
     }
 

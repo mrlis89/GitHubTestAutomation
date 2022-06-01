@@ -28,12 +28,10 @@ public class IssueCreationWindow extends Page {
         super(webDriver);
     }
 
-    @Step("Ввести заголовок для новой задачи")
     public void enterIssueTitle(String issueName) {
         issueTitleField.input(issueName);
     }
 
-    @Step("Ввести комментарий для новой задачи")
     public void enterIssueComment(String issueComment) {
         issueCommentField.input(issueComment);
     }

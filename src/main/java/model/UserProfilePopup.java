@@ -3,7 +3,6 @@ package model;
 import common.Interfaces.SelectorXPath;
 import common.Page;
 import common.selectors.Selector;
-import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 
 
@@ -42,7 +41,6 @@ public class UserProfilePopup extends Page {
         return new YourRepositoriesPage(webDriver);
     }
 
-    @Step("Проверить что в правом углу экрана появилась кнопка профиля с фотографией")
     public Boolean isDisplayed() {
         return userProfileButton.isDisplayed();
     }
