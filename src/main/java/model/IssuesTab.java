@@ -1,37 +1,52 @@
 package model;
 
+import common.Interfaces.SelectorXPath;
+import common.Issue;
 import common.Page;
-import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
+import common.selectors.Selector;
+import common.selectors.ListSelector;
+import common.selectors.NameSelector;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+
+import java.util.ArrayList;
 
 public class IssuesTab extends Page {
-    @FindBy(xpath = "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]")
-    private WebElement newIssueButton;
 
-    public IssuesTab(WebDriver webDriver) {
+    private final Issue issueToOpen;
+
+    @SelectorXPath(
+            selectorName = "Кнопка для создания новой задачи",
+            elementXPath = "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]"
+    )
+    private Selector newIssueButton;
+
+    @SelectorXPath(
+            selectorName = "Задача с именем $Name",
+            elementXPath = "//a[@data-hovercard-type=\"issue\" and contains(text(),'$Name')]"
+    )
+    private NameSelector issueSelector;
+
+    @SelectorXPath(
+            selectorName = "Список задач",
+            elementXPath = "//a[@data-hovercard-type=\"issue\"]"
+    )
+    private ListSelector issueList;
+
+    public IssuesTab(WebDriver webDriver, Issue issueToOpen) {
         super(webDriver);
+        this.issueToOpen = issueToOpen;
     }
 
-    @Step("Нажать кнопку New Issue чтобы открыть окно для создания новой задачи")
     public IssueCreationWindow openIssueCreationWindow() {
-        waiter.waitFor(newIssueButton);
         newIssueButton.click();
         return new IssueCreationWindow(webDriver);
     }
 
-    @Step("Открыть задачу с именем, написанном при создании")
-    public IssueDetailsPage openIssueWithTitle(String issueTitle) {
-        WebElement issue = waiter.waitAndInit(By.xpath("//a[@data-hovercard-type=\"issue\" and contains(text(),'" + issueTitle + "')]"));
-        issue.click();
+    public IssueDetailsPage openIssue() {
+        issueSelector.setNameAndClick(issueToOpen.getTitle());
         return new IssueDetailsPage(webDriver);
     }
-
-    @Step("Убедиться что ранее удаленная задача отсутствует в списке задач")
-    public void hasNoIssueWithTitle(String issueTitle) throws NoSuchElementException {
-        webDriver.findElement(By.xpath("//a[@data-hovercard-type=\"issue\" and contains(text(),'" + issueTitle + "')]"));
+    public ArrayList<String> getIssueTitleList() {
+        return issueList.getList();
     }
 }

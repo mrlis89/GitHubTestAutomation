@@ -1,36 +1,40 @@
 package model;
 
+import common.Interfaces.SelectorXPath;
 import common.Page;
+import common.selectors.Selector;
 import dto.UserAccount;
-import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 public class AuthorizationPage extends Page {
-    @FindBy(xpath = "//input[@id=\"login_field\"]")
-    private WebElement loginField;
-    @FindBy(xpath = "//input[@id=\"password\"]")
-    private WebElement passwordField;
-    @FindBy(xpath = "//input[@value=\"Sign in\"]")
-    private WebElement signInBtn;
+    @SelectorXPath(
+            selectorName = "Поле ввода логина",
+            elementXPath = "//input[@id=\"login_field\"]"
+    )
+    private Selector loginField;
+    @SelectorXPath(
+            selectorName = "Поле ввода пароля",
+            elementXPath = "//input[@id=\"password\"]"
+    )
+    private Selector passwordField;
+    @SelectorXPath(
+            selectorName = "Зеленая кнопка Sign In",
+            elementXPath = "//input[@value=\"Sign in\"]"
+    )
+    private Selector signInBtn;
 
     public AuthorizationPage(WebDriver webDriver) {
         super(webDriver);
     }
 
-    @Step("Ввести логин")
     public void enterLogin(String login) {
-        waiter.waitFor(loginField);
-        loginField.sendKeys(login);
+        loginField.input(login);
     }
 
-    @Step("Ввести пароль")
     public void enterPassword(String password) {
-        passwordField.sendKeys(password);
+        passwordField.input(password);
     }
 
-    @Step("Нажать зеленую кнопку Sign In")
     public void clickSignIn() {
         signInBtn.click();
     }

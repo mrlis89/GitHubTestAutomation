@@ -1,13 +1,18 @@
 package model;
 
+import common.Interfaces.SelectorXPath;
 import common.Page;
+import common.selectors.NameSelector;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 
 public class YourRepositoriesPage extends Page {
+    @SelectorXPath(
+            selectorName = "Репозиторий '$Name'",
+            elementXPath = "//a[@itemprop=\"name codeRepository\" and contains(text(), '$Name')]"
+    )
+    private NameSelector repositoryButton;
 
     public YourRepositoriesPage(WebDriver webDriver) {
         super(webDriver);
@@ -15,9 +20,7 @@ public class YourRepositoriesPage extends Page {
 
     @Step("Нажать на ссылку с именем необходимого репозитория")
     public RepositoryPage openRepository(String repositoryName) {
-        By repositoryButtonPath = By.xpath("//a[@itemprop=\"name codeRepository\" and contains(text(), '" + repositoryName + "')]");
-        WebElement repositoryButton = waiter.waitAndInit(repositoryButtonPath);
-        repositoryButton.click();
+        repositoryButton.setNameAndClick(repositoryName);
         return new RepositoryPage(webDriver);
     }
 }

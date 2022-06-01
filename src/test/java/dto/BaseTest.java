@@ -1,7 +1,6 @@
 package dto;
 
 import common.GWT;
-import common.ScreenshotTaker;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
@@ -18,6 +17,7 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
+import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BaseTest {
@@ -30,7 +30,6 @@ public class BaseTest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("user-data-dir=/cookies");
         options.addArguments("--window-size=1000,1000");
-        ScreenshotTaker.getInstance();
         chromeDriver = new ChromeDriver(options);
         userAccount = UserAccount.getUserAccount();
     }
@@ -39,14 +38,15 @@ public class BaseTest {
     @Description("Пользователь проходит авторизацию c корректными логином и паролем")
     @Feature("Authorization")
     void UserCanAuthorizeWithCorrectCredentials() {
-        new GWT<AuthorizationPage>(chromeDriver)
+        new GWT<AuthorizationPage>()
                 .given("Открыта страница авторизации, даны логин и пароль", () -> {
                     new HomePage(chromeDriver).open();
                     var navigationPanel = new NavigationPanel(chromeDriver).open();
                     return navigationPanel.clickOnSignIn();
                 }).when("Введены логин и пароль", (authPage) -> {
                     authPage.authorize(userAccount);
-                }).then("Авторизация успешна, доступна панель пролфиля пользователя", () -> {
+                }).then(() -> {
+                    step("Авторизация успешна, доступна панель профиля пользователя");
                     assertThat(new UserProfilePopup(chromeDriver).isDisplayed()).isTrue();
                 });
     }

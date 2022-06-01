@@ -1,26 +1,44 @@
 package common;
 
-import io.qameta.allure.Allure;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
+import io.qameta.allure.Attachment;
+import lombok.SneakyThrows;
+import org.openqa.selenium.*;
+import org.openqa.selenium.Rectangle;
 
-import java.io.ByteArrayInputStream;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 
 public class ScreenshotTaker {
-    private static ScreenshotTaker INSTANCE;
 
-    private ScreenshotTaker() {
+    @Attachment(value = "Page Screenshot", type = "image/png")
+    public static byte[] takeScreenshot(WebDriver webDriver) {
+        return  ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
     }
 
-    public static ScreenshotTaker getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new ScreenshotTaker();
-        }
-        return INSTANCE;
+    @SneakyThrows
+    @Attachment(value = "Screenshot with element", type = "image/png")
+    public static byte[] takeScreenshot(WebDriver webDriver, WebElement webElement) {
+        File screenshot = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
+        return ImageWithOutlinedElement(screenshot, webElement);
     }
 
-    public static void takeScreenshot(WebDriver webDriver) {
-        Allure.addAttachment("Screenshot", new ByteArrayInputStream(((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES)));
+    private static byte[] ImageWithOutlinedElement(File file, WebElement webElement) throws IOException {
+        BufferedImage image = ImageIO.read(file);
+        Rectangle elementBorder = webElement.getRect();
+        addRectangleToImage(image, elementBorder);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", outputStream);
+        return outputStream.toByteArray();
+    }
+
+    private static void addRectangleToImage(BufferedImage img, Rectangle rectangle) {
+        var graphics = (Graphics2D) img.getGraphics();
+        graphics.setColor(Color.RED);
+        graphics.setStroke(new BasicStroke(3));
+        graphics.drawRect(rectangle.x, rectangle.y, rectangle.getWidth(), rectangle.getHeight());
     }
 }

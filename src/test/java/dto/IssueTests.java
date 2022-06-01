@@ -8,11 +8,13 @@ import model.IssueCreationWindow;
 import model.IssuesTab;
 import model.RepositoryPage;
 import model.UserProfilePopup;
-import org.openqa.selenium.NoSuchElementException;
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static common.Randomizer.generateString;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static io.qameta.allure.Allure.step;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class IssueTests extends BaseTest {
     private Issue userIssue;
@@ -24,7 +26,7 @@ public class IssueTests extends BaseTest {
         RepositoryPage userRepository = new RepositoryPage(chromeDriver);
         IssueCreationWindow issueCreation = new IssueCreationWindow(chromeDriver);
 
-        new GWT<Issue>(chromeDriver)
+        new GWT<Issue>()
                 .given("Имя и комментарий для задачи, открыто окно для создания задачи", () -> {
                     var userIssue = Issue.builder()
                             .title(generateString())
@@ -33,17 +35,21 @@ public class IssueTests extends BaseTest {
                     var userProfilePopup = new UserProfilePopup(chromeDriver).open();
                     var repositoriesPage = userProfilePopup.openRepositories();
                     var repositoryPage = repositoriesPage.openRepository(userAccount.getRepository());
-                    var issuesTab = repositoryPage.openIssuesTab();
+                    repositoryPage.openIssuesTab();
+                    var issuesTab = new IssuesTab(chromeDriver, userIssue);
                     issuesTab.openIssueCreationWindow();
                     this.userIssue = userIssue;
                     return userIssue;
                 }).when("Задача добавлена", (givenIssue) -> {
                     issueCreation.addIssue(givenIssue);
-                    var issuePage = userRepository
-                            .openIssuesTab()
-                            .openIssueWithTitle(givenIssue.getTitle());
+                    userRepository.openIssuesTab();
+                    var issuesTab = new IssuesTab(chromeDriver, givenIssue);
+                    var issuePage = issuesTab.openIssue();
                     return issuePage.getIssueFromUI();
-                }).then("Добавленная задача должна совпадать с исходной");
+                }).then((given, actual) -> {
+                    step("Добавленная задача должна совпадать с исходной");
+                    assertThat(given).isEqualTo(actual);
+                });
     }
 
     @Test
@@ -51,22 +57,24 @@ public class IssueTests extends BaseTest {
     @Description("Пользователь может удалить задачу из списка")
     void UserCanDeleteIssue() {
         RepositoryPage userRepository = new RepositoryPage(chromeDriver);
-        new GWT<IssuesTab>(chromeDriver)
+        var issuesTab = new IssuesTab(chromeDriver, userIssue);
+        new GWT<List<String>>()
                 .given("Имя задачи для удаления, открыто окно со списком задач", () ->
-                        userRepository
-                                .openIssuesTab())
-                .when("Открываем задачу и нажимаем кнопку Delete issue", (issueTab) -> {
-                    issueTab
-                            .openIssueWithTitle(userIssue.getTitle())
-                            .deleteIssue();
-                    return issueTab;
-
+                {
+                    userRepository.openIssuesTab();
+                    return issuesTab.getIssueTitleList();
                 })
-                .then("Задача больше не отображается в списке задач", (issuesTab) ->
-                        assertThatThrownBy(
-                                () ->issuesTab.hasNoIssueWithTitle(userIssue.getTitle())
-                        ).isInstanceOf(NoSuchElementException.class)
-                );
+                .when("Открываем задачу и нажимаем кнопку Delete issue", () -> {
+                    issuesTab
+                            .openIssue()
+                            .deleteIssue();
+                    userRepository.openIssuesTab();
+                    return issuesTab.getIssueTitleList();
+                })
+                .then((givenList, listAfterDeleting) -> {
+                    step("Задача больше не отображается в списке задач");
+                    assertThat(givenList.size() - 1).isEqualTo(listAfterDeleting.size());
+                });
     }
 
 

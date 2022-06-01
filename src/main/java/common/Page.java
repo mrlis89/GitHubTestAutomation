@@ -1,9 +1,8 @@
 package common;
 
-import common.Waiter;
-import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
+
+import static common.selectors.SelectorInitializer.initSelectors;
 
 public class Page {
     protected WebDriver webDriver;
@@ -12,6 +11,6 @@ public class Page {
     public Page(WebDriver webDriver) {
         this.webDriver = webDriver;
         waiter = new Waiter(webDriver);
-        PageFactory.initElements(webDriver, this);
+        initSelectors(webDriver,this);
     }
 }

@@ -19,6 +19,10 @@ public class Waiter {
         new WebDriverWait(webDriver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(pageElement));
     }
+    public void waitFor(By pageElement) {
+        new WebDriverWait(webDriver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(pageElement));
+    }
 
     public WebElement waitAndInit(By pageElementPath) {
         return new WebDriverWait(webDriver, Duration.ofSeconds(10))

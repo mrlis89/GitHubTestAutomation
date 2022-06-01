@@ -1,4 +1,4 @@
-package common;
+package common.Interfaces;
 
 @FunctionalInterface
 public interface IWhenVoid<T> {

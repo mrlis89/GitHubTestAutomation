@@ -1,46 +1,49 @@
 package model;
 
+import common.Interfaces.SelectorXPath;
 import common.Issue;
 import common.Page;
+import common.selectors.Selector;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 public class IssueCreationWindow extends Page {
-    @FindBy(xpath = "//button[contains(text(),'Submit new issue') and @class=\"btn-primary btn\"]")
-    private WebElement submitNewIssueButton;
+    @SelectorXPath(
+            selectorName = "Submit new issue",
+            elementXPath = "//button[contains(text(),'Submit new issue') and @class=\"btn-primary btn\"]"
+    )
+    private Selector submitNewIssueButton;
+    @SelectorXPath(
+            selectorName = "Поле ввода заголовка задачи",
+            elementXPath = "//input[@id=\"issue_title\"]"
+    )
+    private Selector issueTitleField;
+    @SelectorXPath(
+            selectorName = "Поле ввода комментария для задачи",
+            elementXPath = "//textarea[@id=\"issue_body\"]"
+    )
+    private Selector issueCommentField;
 
     public IssueCreationWindow(WebDriver webDriver) {
         super(webDriver);
     }
 
-    @Step("Ввести заголовок для новой задачи")
     public void enterIssueTitle(String issueName) {
-        By issueTitleFieldPath = By.xpath("//input[@id=\"issue_title\"]");
-        WebElement issueTitleField = waiter.waitAndInit(issueTitleFieldPath);
-        issueTitleField.sendKeys(issueName);
+        issueTitleField.input(issueName);
     }
 
-    @Step("Ввести комментарий для новой задачи")
     public void enterIssueComment(String issueComment) {
-        By issueCommentFieldPath = By.xpath("//textarea[@id=\"issue_body\"]");
-        WebElement issueCommentField = waiter.waitAndInit(issueCommentFieldPath);
-        issueCommentField.sendKeys(issueComment);
+        issueCommentField.input(issueComment);
     }
 
-    @Step("Нажать кнопку Submit new issue чтобы завершить создание новой задачи")
     public void submit() {
-        waiter.waitFor(submitNewIssueButton);
         submitNewIssueButton.click();
     }
 
     @Step("Добавить новую задачу, введя для нее имя и комментарий")
-    public IssueCreationWindow addIssue(Issue issueToAdd) {
+    public void addIssue(Issue issueToAdd) {
         enterIssueTitle(issueToAdd.getTitle());
         enterIssueComment(issueToAdd.getComment());
         submit();
-        return new IssueCreationWindow(webDriver);
     }
 }
