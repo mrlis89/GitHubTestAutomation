@@ -1,33 +1,33 @@
 package model;
 
-import common.Interfaces.SelectorXPath;
+import common.Interfaces.Selector;
 import common.Issue;
 import common.Page;
-import common.selectors.Selector;
+import common.selectors.XPathSelector;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 
 public class IssueDetailsPage extends Page {
-    @SelectorXPath(
+    @Selector(
             selectorName = "Заголовок задачи",
             elementXPath = "//span[@class=\"js-issue-title markdown-title\"]"
     )
-    private Selector issueTitle;
-    @SelectorXPath(
+    private XPathSelector issueTitle;
+    @Selector(
             selectorName = "Комментарий задачи",
             elementXPath = "//td[@class=\"d-block comment-body markdown-body  js-comment-body\"]/descendant::p"
     )
-    private Selector issueComment;
-    @SelectorXPath(
+    private XPathSelector issueComment;
+    @Selector(
             selectorName = "Удалить задачу",
             elementXPath = "//strong[text()='Delete issue']"
     )
-    private Selector deleteIssueButton;
-    @SelectorXPath(
+    private XPathSelector deleteIssueButton;
+    @Selector(
             selectorName = "Подтвердить удаление",
             elementXPath = "//button[@type=\"submit\" and @name=\"verify_delete\"]"
     )
-    private Selector submitDeleting;
+    private XPathSelector submitDeleting;
 
     public IssueDetailsPage(WebDriver webDriver) {
         super(webDriver);

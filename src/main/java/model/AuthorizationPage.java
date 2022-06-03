@@ -1,27 +1,27 @@
 package model;
 
-import common.Interfaces.SelectorXPath;
+import common.Interfaces.Selector;
 import common.Page;
-import common.selectors.Selector;
+import common.selectors.XPathSelector;
 import dto.UserAccount;
 import org.openqa.selenium.WebDriver;
 
 public class AuthorizationPage extends Page {
-    @SelectorXPath(
+    @Selector(
             selectorName = "Поле ввода логина",
             elementXPath = "//input[@id=\"login_field\"]"
     )
-    private Selector loginField;
-    @SelectorXPath(
+    private XPathSelector loginField;
+    @Selector(
             selectorName = "Поле ввода пароля",
             elementXPath = "//input[@id=\"password\"]"
     )
-    private Selector passwordField;
-    @SelectorXPath(
+    private XPathSelector passwordField;
+    @Selector(
             selectorName = "Зеленая кнопка Sign In",
             elementXPath = "//input[@value=\"Sign in\"]"
     )
-    private Selector signInBtn;
+    private XPathSelector signInBtn;
 
     public AuthorizationPage(WebDriver webDriver) {
         super(webDriver);

@@ -1,22 +1,22 @@
 package model;
 
 
-import common.Interfaces.SelectorXPath;
+import common.Interfaces.Selector;
 import common.Page;
-import common.selectors.Selector;
+import common.selectors.XPathSelector;
 import org.openqa.selenium.WebDriver;
 
 public class NavigationPanel extends Page {
-    @SelectorXPath(
+    @Selector(
             selectorName = "Кнопка навигации(3 горизонтальные линии) в правом верхнем углу",
             elementXPath = "//button[@aria-label=\"Toggle navigation\"]"
     )
-    private Selector navigationButton;
-    @SelectorXPath(
+    private XPathSelector navigationButton;
+    @Selector(
             selectorName = "Кнопка Sign In",
             elementXPath = "//a[@href=\"/login\"]"
     )
-    private Selector loginButton;
+    private XPathSelector loginButton;
 
     public NavigationPanel(WebDriver webDriver) {
         super(webDriver);

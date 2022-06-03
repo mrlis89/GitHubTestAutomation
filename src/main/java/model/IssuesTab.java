@@ -1,9 +1,9 @@
 package model;
 
-import common.Interfaces.SelectorXPath;
+import common.Interfaces.Selector;
 import common.Issue;
 import common.Page;
-import common.selectors.Selector;
+import common.selectors.XPathSelector;
 import common.selectors.ListSelector;
 import common.selectors.NameSelector;
 import org.openqa.selenium.WebDriver;
@@ -14,19 +14,19 @@ public class IssuesTab extends Page {
 
     private final Issue issueToOpen;
 
-    @SelectorXPath(
+    @Selector(
             selectorName = "Кнопка для создания новой задачи",
             elementXPath = "//span[contains(text(),'New issue')]//ancestor::a[@role=\"button\"]"
     )
-    private Selector newIssueButton;
+    private XPathSelector newIssueButton;
 
-    @SelectorXPath(
+    @Selector(
             selectorName = "Задача с именем $Name",
             elementXPath = "//a[@data-hovercard-type=\"issue\" and contains(text(),'$Name')]"
     )
     private NameSelector issueSelector;
 
-    @SelectorXPath(
+    @Selector(
             selectorName = "Список задач",
             elementXPath = "//a[@data-hovercard-type=\"issue\"]"
     )

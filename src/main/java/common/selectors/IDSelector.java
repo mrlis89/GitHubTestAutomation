@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class IDSelector extends Selector {
+public class IDSelector extends XPathSelector {
     public IDSelector(WebDriver webDriver, String selectorName, String elementID) {
         super(webDriver, selectorName, elementID);
     }
