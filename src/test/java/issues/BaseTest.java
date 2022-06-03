@@ -1,6 +1,7 @@
-package dto;
+package issues;
 
 import common.GWT;
+import dto.UserAccount;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
@@ -11,9 +12,7 @@ import model.UserProfilePopup;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.io.IOException;
 
@@ -21,10 +20,10 @@ import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BaseTest {
-    UserAccount userAccount;
-    WebDriver chromeDriver;
+    protected UserAccount userAccount;
+    protected WebDriver chromeDriver;
 
-    @BeforeSuite
+    @BeforeClass
     void setupLoginAndPasswordFromFile() throws IOException {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
@@ -51,7 +50,7 @@ public class BaseTest {
                 });
     }
 
-    @AfterSuite
+    @AfterClass
     void UserLogOut() {
         var userProfilePopup = new UserProfilePopup(chromeDriver).open();
         userProfilePopup.clickOnSignOut();

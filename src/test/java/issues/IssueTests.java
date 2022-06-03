@@ -1,4 +1,4 @@
-package dto;
+package issues;
 
 import common.GWT;
 import common.Issue;
