@@ -11,7 +11,7 @@ import static common.ScreenshotTaker.takeScreenshot;
 import static io.qameta.allure.Allure.step;
 
 @AllArgsConstructor
-public class Selector {
+public class XPathSelector {
     protected WebDriver webDriver;
     protected String selectorName;
     protected String elementPath;

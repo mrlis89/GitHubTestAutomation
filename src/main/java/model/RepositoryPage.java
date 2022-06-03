@@ -1,13 +1,13 @@
 package model;
 
-import common.Interfaces.SelectorID;
+import common.Interfaces.Selector;
 import common.Page;
 import common.selectors.IDSelector;
 import org.openqa.selenium.WebDriver;
 
 
 public class RepositoryPage extends Page {
-    @SelectorID(
+    @Selector(
             selectorName = "Кнопка Issues",
             elementID = "issues-tab"
     )

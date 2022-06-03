@@ -1,7 +1,6 @@
 package common.selectors;
 
-import common.Interfaces.SelectorID;
-import common.Interfaces.SelectorXPath;
+import common.Interfaces.Selector;
 import lombok.SneakyThrows;
 import org.openqa.selenium.WebDriver;
 
@@ -12,25 +11,19 @@ public class SelectorInitializer {
     @SneakyThrows
     public static void initSelectors(WebDriver webDriver, Object pageObject) {
         for (Field field : pageObject.getClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(SelectorXPath.class)) {
-                SelectorXPath fieldAnnotation = field.getAnnotation(SelectorXPath.class);
+            if (field.isAnnotationPresent(Selector.class)) {
                 field.setAccessible(true);
+                Selector fieldAnnotation = field.getAnnotation(Selector.class);
+                String elementLocator;
+                if (!fieldAnnotation.elementXPath().equals("")) {
+                    elementLocator = fieldAnnotation.elementXPath();
+                } else elementLocator = fieldAnnotation.elementID();
                 Object selector = field
                         .getType()
                         .getConstructor(WebDriver.class, String.class, String.class)
-                        .newInstance(webDriver, fieldAnnotation.selectorName(), fieldAnnotation.elementXPath());
-                field.set(pageObject,selector);
+                        .newInstance(webDriver, fieldAnnotation.selectorName(), elementLocator);
+                field.set(pageObject, selector);
             }
-            if (field.isAnnotationPresent(SelectorID.class)) {
-                SelectorID fieldAnnotation = field.getAnnotation(SelectorID.class);
-                field.setAccessible(true);
-                Object selector = field
-                        .getType()
-                        .getConstructor(WebDriver.class, String.class, String.class)
-                        .newInstance(webDriver, fieldAnnotation.selectorName(), fieldAnnotation.elementID());
-                field.set(pageObject,selector);
-            }
-
         }
     }
 }

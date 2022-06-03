@@ -7,7 +7,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SelectorID {
+public @interface Selector {
     String selectorName();
-    String elementID();
+    String elementXPath() default "";
+    String elementID() default "";
 }

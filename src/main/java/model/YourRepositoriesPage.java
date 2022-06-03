@@ -1,6 +1,6 @@
 package model;
 
-import common.Interfaces.SelectorXPath;
+import common.Interfaces.Selector;
 import common.Page;
 import common.selectors.NameSelector;
 import io.qameta.allure.Step;
@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 
 
 public class YourRepositoriesPage extends Page {
-    @SelectorXPath(
+    @Selector(
             selectorName = "Репозиторий '$Name'",
             elementXPath = "//a[@itemprop=\"name codeRepository\" and contains(text(), '$Name')]"
     )
