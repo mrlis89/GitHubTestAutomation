@@ -37,6 +37,8 @@ tasks.withType(JavaCompile) {
 }
 
 test {
-    useTestNG()
+    useTestNG() {
+        suites "suite.xml"
+    }
     dependsOn cleanTest
 }
